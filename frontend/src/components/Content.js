@@ -38,6 +38,11 @@ class Content extends Component {
     };
 
     getRecords = () => {
+        if (this.checkedSensors.length == 0)
+        {
+            this.state.records = [];
+            return;
+        }
         var checkedSensors = this.checkedSensors;
         var keys = Object.keys(checkedSensors);
         this.filtered = [];
@@ -52,18 +57,34 @@ class Content extends Component {
     };
 
     handleModalClose = (checkedSensorsInModal) => {
-        if (checkedSensorsInModal) {
-            this.checkedSensors = checkedSensorsInModal;
-            this.getRecords();
-        }
+        this.checkedSensors = checkedSensorsInModal;
+        this.getRecords();
     }
 
     render() {
+        if (!this.state.records || this.state.records.length <= 0) {
+            return (
+            <Fragment>
+                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div className="chartjs-size-monitor"><div className="chartjs-size-monitor-expand"><div className=""></div></div><div className="chartjs-size-monitor-shrink"><div className=""></div></div></div>
+                  <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <b>Выберите, пожалуйста, как минимум один сенсор, чтобы увидеть графики и таблицы показателей...</b>
+                    <div className="btn-toolbar mb-2 mb-md-0">
+                      <div className="btn-group me-2">
+                        <SelectSensorsModal handleModalClose={this.handleModalClose} />
+                      </div>
+                    </div>
+                  </div>
+                </main>
+            </Fragment>
+            );
+        }
         var currentDateTime = new Date();
         var fileName = "amcor " + currentDateTime.toLocaleString();
         return (
             <Fragment>
-                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4"><div className="chartjs-size-monitor"><div className="chartjs-size-monitor-expand"><div className=""></div></div><div className="chartjs-size-monitor-shrink"><div className=""></div></div></div>
+                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div className="chartjs-size-monitor"><div className="chartjs-size-monitor-expand"><div className=""></div></div><div className="chartjs-size-monitor-shrink"><div className=""></div></div></div>
                   <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 className="h2">Температура, °C</h1>
                     <div className="btn-toolbar mb-2 mb-md-0">
